@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/giftbuddy_dev
+    username: giftbuddyuser
+    password: giftbuddypassword
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9999/realms/GiftBuddy
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  logging:
+    level:
+      org:
+        springframework: DEBUG

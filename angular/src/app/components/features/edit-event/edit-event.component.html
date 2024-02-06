@@ -1,0 +1,109 @@
+<div class='flex justify-content-center flex-wrap py-5'>
+  <div class='surface-card p-4 shadow-2 border-round w-full lg:w-6'>
+    <div class='text-center mb-5'>
+      <div class='text-900 text-3xl font-medium mb-3'>Edit event</div>
+      <span class='text-600 font-medium line-height-3'>Edit details of your event</span>
+    </div>
+
+    <form [formGroup]='editEventForm' (ngSubmit)='submitForm()'>
+      <!-- Title Field -->
+      <div class='field mb-3'>
+        <label for='title'>Title</label>
+        <input id='title' type='text' pInputText formControlName='title' class='w-full' />
+        <small *ngIf="editEventForm.get('title')?.invalid && editEventForm.get('title')?.touched" class='p-error'>
+          Title is required and must be at least 4 characters.
+        </small>
+      </div>
+
+      <!-- Description Field -->
+      <div class='field mb-3'>
+        <label for='description'>Description</label>
+        <textarea id='description' rows='5' pInputTextarea formControlName='description' class='w-full'></textarea>
+
+        <div class='text-right'>
+          <small>{{ editEventForm.get('description')?.value!.length || 0 }}/500</small>
+        </div>
+
+        <small *ngIf="editEventForm.get('description')?.invalid && editEventForm.get('description')?.touched"
+               class='p-error'>
+          Description is required and must be at least 4 characters.
+        </small>
+      </div>
+
+      <!-- GiftIdea Field -->
+      <div class='field mb-3'>
+        <label for='giftIdea'>Gift Idea</label>
+        <input id='giftIdea' type='text' pInputText formControlName='giftIdea' class='w-full' />
+        <small *ngIf="editEventForm.get('giftIdea')?.invalid && editEventForm.get('giftIdea')?.touched"
+               class='p-error'>
+          Gift Idea cannot exceed 100 characters.
+        </small>
+      </div>
+
+      <!-- Contribution Field -->
+      <div class='field mb-3'>
+        <label for='contribution'>Contribution</label>
+        <p-inputNumber id='contribution' formControlName='contribution' class='w-full' mode='currency' currency='PLN'
+                       [min]='0' [showButtons]='true'></p-inputNumber>
+        <small *ngIf="editEventForm.get('contribution')?.invalid && editEventForm.get('contribution')?.touched"
+               class='p-error'>
+          Contribution cannot be smaller than 0.
+        </small>
+      </div>
+
+      <!-- Target Amount Field -->
+      <div class='field mb-3'>
+        <label for='targetAmount'>Target Amount</label>
+        <p-inputNumber id='targetAmount' formControlName='targetAmount' class='w-full' mode='currency' currency='PLN'
+                       [min]='0' [showButtons]='true'></p-inputNumber>
+        <small *ngIf="editEventForm.get('targetAmount')?.invalid && editEventForm.get('targetAmount')?.touched">
+          Target Amount cannot be smaller than 0.
+        </small>
+      </div>
+
+      <!-- EndDate Field -->
+      <div class='field flex-grow-1 -my-1'>
+        <label for='endDate'>End Date</label>
+      </div>
+      <div class='field flex-grow-1'>
+        <p-calendar id='endDate' formControlName='endDate' dateFormat='dd.mm.yy' [minDate]='minDate' [showIcon]='true'
+                    class='w-full'></p-calendar>
+      </div>
+      <small *ngIf="editEventForm.get('endDate')?.invalid && editEventForm.get('endDate')?.touched"
+             class='p-error'>
+        Date is required. Must be in the future.
+      </small>
+
+      <!-- Image URL Field -->
+      <div class='field mb-3'>
+        <label for='imageUrl'>Image</label>
+        <p-fileUpload
+          id='imageUrl'
+          accept='image/*'
+          [showUploadButton]='false'
+          [showCancelButton]='false'
+        >
+          <ng-template pTemplate='content'>
+            <ul *ngIf='uploadedFiles.length'>
+              <li *ngFor='let file of uploadedFiles'>{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+
+      <!-- Terms Checkbox -->
+      <div class='field-checkbox mb-4'>
+        <p-checkbox formControlName='terms' [binary]='true' label='Accept&nbsp;'></p-checkbox>
+        <a href='https://www.google.com'>terms & policy</a>
+        <small *ngIf="editEventForm.get('terms')?.invalid && editEventForm.get('terms')?.touched" class='p-error'>
+          You must accept the terms and conditions.
+        </small>
+      </div>
+
+      <!-- Submit Button -->
+      <div class='flex justify-content-center'>
+        <button pButton pRipple type='submit' label='Save changes' icon='pi pi-check' class='mt-2'></button>
+      </div>
+    </form>
+  </div>
+</div>

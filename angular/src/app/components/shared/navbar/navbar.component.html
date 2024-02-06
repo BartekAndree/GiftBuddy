@@ -1,0 +1,42 @@
+<nav class='surface-100'>
+  <div class='flex align-items-center justify-content-between py-3 px-4'>
+
+    <!-- Logo and Brand Name -->
+    <a class='flex align-items-center no-underline text-black-alpha-90' routerLink='/ '>
+      <img alt='GiftBuddy Logo' ngSrc='assets/logos/giftbuddy-logo.png' height='50' width='50' class='mr-2'>
+      <span class='block font-bold text-2xl'>GiftBuddy</span>
+    </a>
+
+    <!-- User is logged -->
+    <ng-container *ngIf='isUserLoggedIn(); else showLoginRegister'>
+      <div class='hidden md:flex' *ngIf='isUserLoggedIn()'>
+        <p-button label='Create Event' [text]='true' [plain]='true' routerLink='event'></p-button>
+        <p-button label='My Events' [text]='true' [plain]='true' routerLink='my-events'></p-button>
+      </div>
+
+      <!-- Profile and Log Out -->
+      <div class='hidden md:flex align-items-center'>
+        <p-button icon='pi pi-user-edit' [label]='getUsername()' severity='info' class='mx-2' badge='1'
+                  size='small'></p-button>
+        <p-button icon='pi pi-sign-out' label='Log Out' severity='warning' size='small'
+                  (click)='handleLogoutClick()'></p-button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class='md:hidden card flex justify-content-center'>
+        <p-menu #menu [model]='items' [popup]='true'></p-menu>
+        <p-button icon='pi pi-bars' label='Menu' severity='warning' size='small'
+                  (click)='menu.toggle($event)'></p-button>
+      </div>
+    </ng-container>
+
+    <!-- User is not logged -->
+    <ng-template #showLoginRegister>
+      <!-- Login and Register -->
+      <div class='flex'>
+        <p-button label='Login' severity='primary' class='mx-2' size='small' (click)='handleLoginClick()'></p-button>
+        <p-button label='Register' severity='help' size='small' (click)='handleRegisterClick()'></p-button>
+      </div>
+    </ng-template>
+  </div>
+</nav>

@@ -1,0 +1,64 @@
+<div class='card'>
+  <p-table [value]='participantsList' [(selection)]='selectedParticipantsIds'>
+    <ng-template pTemplate='header'>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th *ngIf='isOrganizer' style='width: 4rem'>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate='body' let-participant let-rowIndex='rowIndex'>
+      <tr>
+        <td>{{ rowIndex + 1 }}.</td>
+        <td>
+          <i class='pi pi-user mx-3'></i>
+          {{ participant.firstName }} {{ participant.lastName }}
+        </td>
+        <td>
+          <i class='pi mx-4' [ngClass]="participant.isSettled ? 'pi-check' : 'pi-times'"></i>
+        </td>
+        <td *ngIf='isOrganizer'>
+          <ng-container *ngIf='!participant.isSettled'>
+            <p-tableCheckbox [value]='participant.id'></p-tableCheckbox>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-toolbar *ngIf='isOrganizer' styleClass='mb-4 gap-2'>
+    <ng-template pTemplate='left'>
+      <span class='p-float-label'>
+        <input pInputText id='email' [formControl]='emailControl' />
+        <label for='email'>Email</label>
+      </span>
+      <button pButton pRipple label='Invite' icon='pi pi-plus' class='p-button-success mr-2'
+              (click)='handleSaveEmailToBuffer()'></button>
+    </ng-template>
+    <ng-template pTemplate='right'>
+      <button pButton pRipple label='Settle' icon='pi pi-money-bill' class='p-button-danger mr-2'
+              (click)='settleSelectedParticipants()'
+              [disabled]='selectedParticipantsIds.length === 0'></button>
+    </ng-template>
+  </p-toolbar>
+
+</div>
+
+<ng-container *ngIf='isOrganizer'>
+  <ng-container *ngFor='let emailbuffer of emailbuffersList'>
+    <div class='inline'>
+      <p-chip
+        label='{{ emailbuffer.email }}'
+        icon='pi pi-user-plus'
+        [removable]='true'
+        removeIcon='pi pi-times'
+        (onRemove)='removeEmailFromBuffer(emailbuffer.id)'
+        styleClass='mr-1 mb-1'
+      >
+      </p-chip>
+    </div>
+  </ng-container>
+</ng-container>
+

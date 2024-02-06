@@ -1,0 +1,62 @@
+<ng-container *ngIf='eventsList.length; else noEvents'>
+
+  <div class='text-center my-5'>
+    <div class='mb-3 font-bold text-3xl'>
+      <span class='text-900 text-black-alpha-70'>My Events</span>
+    </div>
+  </div>
+
+  <ng-container *ngFor='let event of eventsList'>
+    <div class='p-card custom-card p-component mb-3 shadow-2 p-p-3 grid'>
+      <div class='col-12 lg:col-3 p-p-0'>
+        <ng-container *ngIf='event.imageUrl; else defaultImage'>
+          <img src='{{ event.imageUrl }}' alt='Event image' class='w-full custom-img'>
+        </ng-container>
+        <ng-template #defaultImage>
+          <img src='assets/default-images/coming-soon.png' alt='Default event image' class='w-full custom-img'>
+        </ng-template>
+      </div>
+      <div class='col-12 lg:col-9 p-pl-3'>
+        <div class='text-left'>
+          <h2 class='mb-2'>{{ event.title }}</h2>
+          <p class='mb-2 p-text-secondary'>End Date: {{ event.endDate | date: 'dd.MM.yyyy' }}</p>
+          <p class='mb-2 p-text-secondary' *ngIf='event.contribution'>
+            Contribution: {{ event.contribution | currency: 'PLN':'zł ' }}</p>
+          <p-button label='Details' size='small' icon='pi pi-search' iconPos='right'
+                    [routerLink]="['/event', event.id]"></p-button>
+          <ng-container *ngIf='isUserOrganizer(event.organizerExternalId)'>
+            <p-button
+              label='Edit'
+              size='small'
+              icon='pi pi-pencil'
+              iconPos='right'
+              class='ml-2'
+              severity='warning'
+              [routerLink]="['/event', event.id, 'edit']"
+              [disabled]='!event.isActive'
+            ></p-button>
+            <p-button
+              label='Delete'
+              size='small'
+              icon='pi pi-trash'
+              iconPos='right'
+              class='ml-2'
+              severity='danger'
+              (click)='confirmDelete(this.event.id)'
+              [disabled]='!event.isActive'
+            ></p-button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #noEvents>
+  <div class='flex align-items-center justify-content-center'>
+    <div class='text-center'>
+      <h2 class='text-900 text-3xl text-black-alpha-70'>No events found</h2>
+      <p class='text-600 mb-6'>You haven't participated in any events yet.</p>
+    </div>
+  </div>
+</ng-template>
